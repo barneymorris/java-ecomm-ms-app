@@ -1,4 +1,4 @@
-package com.barneymorris.ecomm;
+package com.barneymorris.ecommerce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
