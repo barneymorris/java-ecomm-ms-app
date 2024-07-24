@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException exp) {
         var errors = new HashMap<String, String>();
-        exp.getAllErrors()
+        exp.getBindingResult().getAllErrors()
                 .forEach((error) -> {
                     var fieldName = ((FieldError)error).getField();
                     var errorMessage = error.getDefaultMessage();
