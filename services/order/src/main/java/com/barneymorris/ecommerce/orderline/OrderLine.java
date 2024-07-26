@@ -1,5 +1,6 @@
-package com.barneymorris.ecommerce.order;
+package com.barneymorris.ecommerce.orderline;
 
+import com.barneymorris.ecommerce.order.Order;
 import jakarta.persistence.*;
 import lombok.*;
 
