@@ -1,3 +1,5 @@
+set SEARCH_PATH = "product";
+
 create table if not exists category
 (
     id integer not null primary key,
