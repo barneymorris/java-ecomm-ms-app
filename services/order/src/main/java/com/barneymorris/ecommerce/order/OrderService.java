@@ -6,6 +6,8 @@ import com.barneymorris.ecommerce.kafka.OrderConfirmation;
 import com.barneymorris.ecommerce.kafka.OrderProducer;
 import com.barneymorris.ecommerce.orderline.OrderLineRequest;
 import com.barneymorris.ecommerce.orderline.OrderLineService;
+import com.barneymorris.ecommerce.payment.PaymentClient;
+import com.barneymorris.ecommerce.payment.PaymentRequest;
 import com.barneymorris.ecommerce.product.ProductClient;
 import com.barneymorris.ecommerce.product.PurchaseRequest;
 import jakarta.persistence.EntityNotFoundException;
@@ -24,6 +26,7 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderLineService orderLineService;
     private final OrderProducer orderProducer;
+    private final PaymentClient paymentClient;
 
     public Integer createOrder(OrderRequest orderRequest) {
         var customer = this.customerClient.findCustomerById(orderRequest.customerId())
@@ -38,6 +41,16 @@ public class OrderService {
                     new OrderLineRequest(null, order.getId(), purchaseRequest.productId(), purchaseRequest.quantity())
             );
         }
+
+        paymentClient.requestOrderPayment(
+                new PaymentRequest(
+                        orderRequest.amount(),
+                        orderRequest.paymentMethod(),
+                        order.getId(),
+                        order.getReference(),
+                        customer
+                )
+        );
 
         orderProducer.sendOrderConfirmation(
                 new OrderConfirmation(
